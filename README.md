@@ -1,9 +1,42 @@
-# Create a JavaScript Action using TypeScript
+# Update Homebrew Action
+> EXPERIMENTAL: please don't use this in production.
 
-This template offers an easy way to get started writing a JavaScript action with TypeScript compile time support, unit testing with Jest and using the GitHub Actions Toolkit.
+This action pushes a new release to a Homebrew tap.
 
-## Getting Started
+---
 
-See the walkthrough located [here](https://github.com/actions/toolkit/blob/master/docs/typescript-action.md).
+## Use case
+You might find this action useful if:
 
-In addition to walking your through how to create an action, it also provides strategies for versioning, releasing and referencing your actions.
+- You have a separate repository for your Homebrew formula and you want to update it whenever you release a new version of your tool
+- In the main repo of your tool you store a template your Formula (see `examples/homebrew-formula.rb`)
+- You need to automate the update of the version, hash and url to executables in your formula.
+
+## Inputs
+
+### `packageName`
+
+**Required** Your homebrew package name.
+
+### `templatePath`
+
+**Required** The path for the homebrew formula handlebar template. Default `"support/homebrew-formula.rb"`.
+
+### `tapRepo`
+
+**Required** The Homebrew Tap repo (`org/repo_name`).
+
+### `srcRepo`
+
+**Required** The repo of the source. Default: to current context repo
+
+## Example usage
+
+```yaml
+uses: garden-io/update-homebrew-action@v1
+with:
+  packageName: 'garden-cli'
+  templatePath: 'support/homebrew-formula.rb'
+  tapRepo: 'garden-io/homebrew-garden'
+  srcRepo: 'garden-io/garden'
+```

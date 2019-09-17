@@ -1,9 +1,92 @@
-import * as core from '@actions/core';
+import * as core from "@actions/core"
+import * as github from "@actions/github"
+import { resolve } from "path"
+import execa from "execa"
+import handlebars from "handlebars"
+import { writeFile, readFile, ensureDir, pathExists, remove } from "fs-extra"
+import { find } from "lodash"
+import { getUrlChecksum } from "./util";
+
+const { GITHUB_TOKEN, GITHUB_WORKSPACE } = process.env
 
 async function run() {
   try {
-    const myInput = core.getInput('myInput');
-    core.debug(`Hello ${myInput}`);
+    const { context } = github
+    const octokit = new github.GitHub(GITHUB_TOKEN || "")
+
+    const workspace = GITHUB_WORKSPACE || ""
+
+    const packageName = core.getInput("packageName")
+    const templatePath = core.getInput("templatePath")
+
+    const tapRepo = core.getInput("tapRepo") // format: org/repo
+    const srcRepo = core.getInput("srcRepo") || `${context.repo.owner}/${context.repo.repo}`
+
+    const tmpDir = resolve(__dirname, "tmp")
+
+    console.log("Pulling the homebrew repo")
+    await ensureDir(tmpDir)
+    const brewRepoDir = resolve(tmpDir, tapRepo.split("/")[1]) // catch errors here
+    if (await pathExists(brewRepoDir)) {
+      await remove(brewRepoDir)
+    }
+    await execa("git", ["clone", `git@github.com:${tapRepo}.git`], { cwd: tmpDir })
+
+    // read the existing formula
+    console.log("Reading currently published formula")
+    const formulaDir = resolve(brewRepoDir, "Formula")
+    await ensureDir(formulaDir)
+
+    // compile the formula handlebars template
+    const fullTemplatePath = resolve(workspace, templatePath)
+    const templateString = (await readFile(fullTemplatePath)).toString()
+    const template = handlebars.compile(templateString)
+
+    // get the metadata from GitHub
+    console.log("Preparing formula")
+
+    // note: this excludes pre-releases
+    const latestRelease = await octokit.request(`GET /repos/${srcRepo}/releases/latest`)
+
+    const version = latestRelease.data.tag_name.slice(1)
+    const releaseId = latestRelease.data.id
+
+    const assets = await octokit.request(`GET /repos/${srcRepo}/releases/${releaseId}/assets`)
+
+    const tarballUrl = find(assets.data, a => a.name.includes("macos")).browser_download_url
+    const sha256 = await getUrlChecksum(tarballUrl, "sha256")
+
+    const formula = template({
+      version,
+      tarballUrl,
+      sha256,
+    })
+
+    const formulaPath = resolve(formulaDir, `${packageName}.rb`)
+    const existingFormula = await pathExists(formulaPath) ? (await readFile(formulaPath)).toString() : ""
+
+    if (formula === existingFormula) {
+      console.log("No changes to formula")
+    } else {
+      console.log("Writing new formula to " + formulaPath)
+      await writeFile(formulaPath, formula)
+
+      // check if the formula is OK
+      console.log("Auditing formula")
+      await execa("brew", ["audit", formulaPath])
+
+      console.log("Pushing to git")
+      for (const args of [
+        ["add", formulaPath],
+        ["commit", "-m", `update to ${version}`],
+        ["tag", version],
+        ["push"],
+        ["push", "--tags"],
+      ]) {
+        await execa("git", args, { cwd: brewRepoDir })
+      }
+    }
+
   } catch (error) {
     core.setFailed(error.message);
   }

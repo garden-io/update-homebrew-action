@@ -1,10 +1,23 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'update-homebrew-action'
+description: 'A GitHub Action for pushing new releases to your Homebrew tap'
+author: 'Garden Technologies, Inc. <info@garden.io>'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  packageName:
+    description: 'Your homebrew package name'
+    required: true
+  templatePath:
+    description: 'The path for the homebrew formula handlebar template'
+    default: 'support/homebrew-formula.rb'
+    required: true
+  authToken:
+    description: 'The auto-generated GITHUB_TOKEN secret'
+    required: true
+  tapRepo:
+    description: 'The Homebrew Tap repo (format: org/repo_name)'
+    required: true
+  srcRepo:
+    description: 'The repo of the source. Defaults to currenct context repo'
+    required: true
 runs:
   using: 'node12'
   main: 'lib/main.js'
