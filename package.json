@@ -1,0 +1,38 @@
+
+{
+  "name": "update-homebrew-action",
+  "version": "0.0.1",
+  "description": "A GitHub Action for pushing new releases to your Homebrew tap",
+  "keywords": [
+    "actions",
+    "node",
+    "setup"
+  ],
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garden-io/update-homebrew-action.git"
+  },
+  "author": "Garden Technologies, Inc. <info@garden.io>",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/garden-io/update-homebrew-action/issues"
+  },
+  "homepage": "https://github.com/garden-io/update-homebrew-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.1.0",
+    "@actions/github": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.4",
+    "jest": "^24.8.0",
+    "jest-circus": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.1"
+  }
+}
