@@ -7,26 +7,28 @@ import { writeFile, readFile, ensureDir, pathExists, remove } from "fs-extra"
 import { find } from "lodash"
 import { getUrlChecksum } from "./util";
 
-const { GITHUB_TOKEN, GITHUB_WORKSPACE } = process.env
+const { GITHUB_WORKSPACE } = process.env
 
 async function run() {
   try {
     const { context } = github
-    const octokit = new github.GitHub(GITHUB_TOKEN || "")
 
     const workspace = GITHUB_WORKSPACE || ""
 
+    // TODO: implement better input validation
     const packageName = core.getInput("packageName")
     const templatePath = core.getInput("templatePath")
-
+    const authToken = core.getInput("authToken")
     const tapRepo = core.getInput("tapRepo") // format: org/repo
     const srcRepo = core.getInput("srcRepo") || `${context.repo.owner}/${context.repo.repo}`
 
     const tmpDir = resolve(__dirname, "tmp")
 
+    const octokit = new github.GitHub(authToken || "")
+
     console.log("Pulling the homebrew repo")
     await ensureDir(tmpDir)
-    const brewRepoDir = resolve(tmpDir, tapRepo.split("/")[1]) // catch errors here
+    const brewRepoDir = resolve(tmpDir, tapRepo.split("/")[1])
     if (await pathExists(brewRepoDir)) {
       await remove(brewRepoDir)
     }

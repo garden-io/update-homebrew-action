@@ -30,6 +30,10 @@ You might find this action useful if:
 
 **Required** The repo of the source. Default: to current context repo
 
+### `authToken`
+
+**Required** The auto-generate `GITHUB_TOKEN` from the secrets.
+
 ## Example usage
 
 ```yaml
@@ -39,4 +43,5 @@ with:
   templatePath: 'support/homebrew-formula.rb'
   tapRepo: 'garden-io/homebrew-garden'
   srcRepo: 'garden-io/garden'
+  authToken: ${{ secrets.GITHUB_TOKEN }}
 ```
