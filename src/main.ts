@@ -77,16 +77,22 @@ async function run() {
       console.log("Auditing formula")
       await execa("brew", ["audit", formulaPath])
 
+      const config = await execa("git", ["config", "--list"], { cwd: brewRepoDir })
+      console.log("Got config", config.stdout)
+
+      const status = await execa("git", ["status"], { cwd: brewRepoDir })
+      console.log("Got status", status.stdout)
+
       console.log("Pushing to git")
-      for (const args of [
-        ["add", formulaPath],
-        ["commit", "-m", `update to ${version}`],
-        ["tag", version],
-        ["push"],
-        ["push", "--tags"],
-      ]) {
-        await execa("git", args, { cwd: brewRepoDir })
-      }
+      // for (const args of [
+      //   ["add", formulaPath],
+      //   ["commit", "-m", `update to ${version}`],
+      //   ["tag", version],
+      //   ["push"],
+      //   ["push", "--tags"],
+      // ]) {
+      //   await execa("git", args, { cwd: brewRepoDir })
+      // }
     }
 
   } catch (error) {
