@@ -1,4 +1,5 @@
 # Update Homebrew Action
+
 > EXPERIMENTAL: please don't use this in production.
 
 This action pushes a new release to a Homebrew tap.
@@ -6,6 +7,7 @@ This action pushes a new release to a Homebrew tap.
 ---
 
 ## Use case
+
 You might find this action useful if:
 
 - You have a separate repository for your Homebrew formula and you want to update it whenever you release a new version of your tool
@@ -45,3 +47,7 @@ with:
   srcRepo: 'garden-io/garden'
   authToken: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+## Contributing
+
+Please see [CONTRIBUTING.md](./CONTRIBUTING.md)
