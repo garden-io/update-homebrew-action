@@ -50,7 +50,7 @@ async function run() {
     // note: this excludes pre-releases
     const latestRelease = await octokit.request(`GET /repos/${srcRepo}/releases/latest`)
 
-    const version = latestRelease.data.tag_name.slice(1)
+    const version = latestRelease.data.tag_name
     const releaseId = latestRelease.data.id
 
     const assets = await octokit.request(`GET /repos/${srcRepo}/releases/${releaseId}/assets`)
@@ -85,6 +85,7 @@ async function run() {
         ["push"],
         ["push", "--tags"],
       ]) {
+        console.log(`Running: "git ${args.join(" ")}"`)
         await execa("git", args, { cwd: brewRepoDir })
       }
     }
