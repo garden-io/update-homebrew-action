@@ -85,6 +85,7 @@ async function run() {
         ["push"],
         ["push", "--tags"],
       ]) {
+        console.log(`Running: "git ${args.join(" ")}"`)
         await execa("git", args, { cwd: brewRepoDir })
       }
     }
