@@ -17,11 +17,8 @@ import { getUrlChecksum } from "./utils"
 
 const { GITHUB_WORKSPACE } = process.env
 
-
 async function run() {
   try {
-    // const { context } = github
-
     const workspace = GITHUB_WORKSPACE || ""
 
     // TODO: implement better input validation
@@ -82,9 +79,11 @@ async function run() {
       console.log("Writing new formula to " + formulaPath)
       await writeFile(formulaPath, formula)
 
-      // check if the formula is OK
-      console.log("Auditing formula")
-      await execa("brew", ["audit", formulaPath])
+      // This is commented until https://github.com/Homebrew/brew/pull/8589 is merged.
+      // // check if the formula is OK
+      // console.log("Auditing formula")
+      // await execa("brew", ["audit", formulaPath])
+
 
       console.log("Pushing to git")
       for (const args of [
