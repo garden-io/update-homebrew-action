@@ -1,17 +1,18 @@
 import * as core from "@actions/core"
-import * as github from "@actions/github"
+import { getOctokit, context } from "@actions/github"
 import { resolve } from "path"
 import execa from "execa"
 import handlebars from "handlebars"
 import { writeFile, readFile, ensureDir, pathExists, remove } from "fs-extra"
 import { find } from "lodash"
-import { getUrlChecksum } from "./util";
+import { getUrlChecksum } from "./utils"
 
 const { GITHUB_WORKSPACE } = process.env
 
+
 async function run() {
   try {
-    const { context } = github
+    // const { context } = github
 
     const workspace = GITHUB_WORKSPACE || ""
 
@@ -24,7 +25,7 @@ async function run() {
 
     const tmpDir = resolve(__dirname, "tmp")
 
-    const octokit = new github.GitHub(authToken || "")
+    const octokit = getOctokit(authToken)
 
     console.log("Pulling the homebrew repo")
     await ensureDir(tmpDir)

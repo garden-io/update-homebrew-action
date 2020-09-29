@@ -1,9 +1,8 @@
-
-import Axios from "axios"
+import axios from "axios"
 import { createHash } from "crypto"
 
 export async function getUrlChecksum(url: string, algorithm = "sha256") {
-  const response = await Axios({
+  const response = await axios({
     method: "GET",
     url,
     responseType: "stream",
