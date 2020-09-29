@@ -10,7 +10,7 @@
   "main": "dist/index.js",
   "scripts": {
     "cleanup": "rm -rf dist",
-    "build": "npm run cleanup && ncc build src/index.ts",
+    "build": "npm run cleanup && ncc build --minify src/index.ts",
     "test": "jest"
   },
   "repository": {
