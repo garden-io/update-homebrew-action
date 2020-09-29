@@ -7,9 +7,10 @@
     "node",
     "setup"
   ],
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "cleanup": "rm -rf dist",
+    "build": "npm run cleanup && ncc build --minify src/index.ts",
     "test": "jest"
   },
   "repository": {
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "@vercel/ncc": "^0.24.1",
     "jest": "^24.8.0",
     "jest-circus": "^24.7.1",
     "ts-jest": "^24.0.2",
