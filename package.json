@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/garden-io/update-homebrew-action#readme",
   "dependencies": {
-    "@actions/core": "^1.1.0",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^1.1.0",
     "@types/node": "^12.7.5",
     "@octokit/rest": "^16.28.9",
