@@ -1,18 +1,24 @@
+/*
+ * Copyright (C) 2018-2020 Garden Technologies, Inc. <info@garden.io>
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import * as core from "@actions/core"
-import * as github from "@actions/github"
+import { getOctokit, context } from "@actions/github"
 import { resolve } from "path"
 import execa from "execa"
 import handlebars from "handlebars"
 import { writeFile, readFile, ensureDir, pathExists, remove } from "fs-extra"
 import { find } from "lodash"
-import { getUrlChecksum } from "./util";
+import { getUrlChecksum } from "./utils"
 
 const { GITHUB_WORKSPACE } = process.env
 
 async function run() {
   try {
-    const { context } = github
-
     const workspace = GITHUB_WORKSPACE || ""
 
     // TODO: implement better input validation
@@ -24,7 +30,7 @@ async function run() {
 
     const tmpDir = resolve(__dirname, "tmp")
 
-    const octokit = new github.GitHub(authToken || "")
+    const octokit = getOctokit(authToken)
 
     console.log("Pulling the homebrew repo")
     await ensureDir(tmpDir)
@@ -73,9 +79,11 @@ async function run() {
       console.log("Writing new formula to " + formulaPath)
       await writeFile(formulaPath, formula)
 
-      // check if the formula is OK
-      console.log("Auditing formula")
-      await execa("brew", ["audit", formulaPath])
+      // This is commented until https://github.com/Homebrew/brew/pull/8589 is merged.
+      // // check if the formula is OK
+      // console.log("Auditing formula")
+      // await execa("brew", ["audit", formulaPath])
+
 
       console.log("Pushing to git")
       for (const args of [
