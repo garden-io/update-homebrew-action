@@ -7,9 +7,10 @@
     "node",
     "setup"
   ],
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "cleanup": "rm -rf dist",
+    "build": "npm run cleanup && ncc build --no-cache --no-source-map-register --license LICENSE src/index.ts",
     "test": "jest"
   },
   "repository": {
@@ -23,11 +24,10 @@
   },
   "homepage": "https://github.com/garden-io/update-homebrew-action#readme",
   "dependencies": {
-    "@actions/core": "^1.1.0",
-    "@actions/github": "^1.1.0",
+    "@actions/core": "1.2.6",
+    "@actions/github": "4.0.0",
     "@types/node": "^12.7.5",
-    "@octokit/rest": "^16.28.9",
-    "axios": "^0.19.0",
+    "axios": "0.20.0",
     "execa": "^2.0.4",
     "fs-extra": "^8.1.0",
     "handlebars": "^4.2.0",
@@ -35,9 +35,10 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "@vercel/ncc": "^0.24.1",
     "jest": "^24.8.0",
     "jest-circus": "^24.7.1",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.5.1"
+    "typescript": "^3.9.7"
   }
 }
