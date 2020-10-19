@@ -49,17 +49,17 @@ on:
 
 jobs:
   homebrew-release:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - name: Release Homebrew Formula
-          if: github.event.release.prerelease != true
-          uses: garden-io/update-homebrew-action@v1
-          with:
-            packageName: 'garden-cli'
-            templatePath: 'support/homebrew-formula.rb'
-            tapRepo: 'garden-io/homebrew-garden'
-            srcRepo: 'garden-io/garden'
-            authToken: ${{ secrets.GITHUB_TOKEN }}
+        if: github.event.release.prerelease != true
+        uses: garden-io/update-homebrew-action@v1
+        with:
+          packageName: "garden-cli"
+          templatePath: "support/homebrew-formula.rb"
+          tapRepo: "garden-io/homebrew-garden"
+          srcRepo: "garden-io/garden"
+          authToken: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Example of a valid formula template
