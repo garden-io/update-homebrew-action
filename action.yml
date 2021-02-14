@@ -16,7 +16,7 @@ inputs:
     description: 'The Homebrew Tap repo (format: org/repo_name)'
     required: true
   srcRepo:
-    description: 'The repo of the source. Defaults to currenct context repo'
+    description: 'The repo of the source. Defaults to current context repo'
     required: true
 runs:
   using: 'node12'
