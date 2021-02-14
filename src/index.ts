@@ -13,7 +13,7 @@ import execa from "execa"
 import handlebars from "handlebars"
 import { writeFile, readFile, ensureDir, pathExists, remove } from "fs-extra"
 import { find } from "lodash"
-import { getUrlChecksum } from "./utils"
+import {getUrlChecksum, getVersionFromTag} from "./utils"
 
 const { GITHUB_WORKSPACE } = process.env
 
@@ -56,7 +56,7 @@ async function run() {
     // note: this excludes pre-releases
     const latestRelease = await octokit.request(`GET /repos/${srcRepo}/releases/latest`)
 
-    const version = latestRelease.data.tag_name
+    const version = getVersionFromTag(latestRelease.data.tag_name)
     const releaseId = latestRelease.data.id
 
     const assets = await octokit.request(`GET /repos/${srcRepo}/releases/${releaseId}/assets`)

@@ -30,3 +30,11 @@ export async function getUrlChecksum(url: string, algorithm = "sha256") {
     response.data.on("error", reject)
   })
 }
+
+export function getVersionFromTag(tag_name: string) {
+  if (tag_name.startsWith("v")){
+    return tag_name.substring(1)
+  } else {
+    return tag_name
+  }
+}
