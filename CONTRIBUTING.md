@@ -5,7 +5,7 @@
 We require node `v12.x`. Please make sure you are running the right version.
 
 ```sh
-npm run install
+npm install
 ```
 
 ## Develop
