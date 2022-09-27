@@ -27,7 +27,7 @@
     "@actions/core": "1.2.6",
     "@actions/github": "4.0.0",
     "@types/node": "^12.7.5",
-    "axios": "0.20.0",
+    "axios": "0.21.2",
     "execa": "^2.0.4",
     "fs-extra": "^8.1.0",
     "handlebars": "^4.2.0",
