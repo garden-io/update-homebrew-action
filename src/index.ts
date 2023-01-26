@@ -12,7 +12,6 @@ import { resolve } from "path"
 import execa from "execa"
 import handlebars from "handlebars"
 import { writeFile, readFile, ensureDir, pathExists, remove } from "fs-extra"
-import { find } from "lodash"
 import { getUrlChecksum } from "./utils"
 
 const { GITHUB_WORKSPACE } = process.env
