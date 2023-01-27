@@ -12,7 +12,6 @@ import { resolve } from "path"
 import execa from "execa"
 import handlebars from "handlebars"
 import { writeFile, readFile, ensureDir, pathExists, remove } from "fs-extra"
-import { find } from "lodash"
 import { getUrlChecksum } from "./utils"
 
 const { GITHUB_WORKSPACE } = process.env
@@ -57,11 +56,8 @@ async function run() {
     const latestRelease = await octokit.request(`GET /repos/${srcRepo}/releases/latest`)
 
     const version = latestRelease.data.tag_name
-    const releaseId = latestRelease.data.id
 
-    const assets = await octokit.request(`GET /repos/${srcRepo}/releases/${releaseId}/assets`)
-
-    const tarballUrl = find(assets.data, a => a.name.includes("macos")).browser_download_url
+    const tarballUrl = `https://download.garden.io/core/${version}/garden-${version}-macos-amd64.tar.gz`
     const sha256 = await getUrlChecksum(tarballUrl, "sha256")
 
     const formula = template({
